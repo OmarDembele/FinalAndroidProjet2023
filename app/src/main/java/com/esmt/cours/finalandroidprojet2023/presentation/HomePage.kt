@@ -96,7 +96,7 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
             modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
-                .background(Color.Green),
+                .background(Color.Cyan),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ){
@@ -282,7 +282,7 @@ fun ContactScreen(){
 }
 
 @Composable
-fun Navigation(navController: NavHostController){
+fun Navigation(navController: NavHostController = rememberNavController()){
 
     NavHost(navController, startDestination = NavigationItem.Home.route){
 

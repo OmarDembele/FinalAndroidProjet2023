@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,11 +33,16 @@ import androidx.compose.foundation.layout.Spacer as Spacer1
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RegisterPage(navController: NavController?) {
+fun RegisterPage(
+    authViewModel: AuthViewModel? = null,
+    onNavToHomePage:() ->Unit,
+    onNavToLoginPage:() ->Unit,
+    //navController: NavController?
+) {
 
-    val nameValue = remember { mutableStateOf("") }
-    val emailValue = remember { mutableStateOf("") }
-    val passwordValue = remember { mutableStateOf("") }
+    val loginUiState = authViewModel?.loginUiState
+    val isError = loginUiState?.signUpError != null
+    val context = LocalContext.current
 
     val passwordVisibility = remember { mutableStateOf(false) }
 
@@ -73,31 +79,26 @@ fun RegisterPage(navController: NavController?) {
                         letterSpacing = 2.sp
                     )
                 )
+                if (isError){
+                    Text(text = loginUiState?.signUpError ?: "Unknown error",
+                        color = Color.Red)
+                }
                 Spacer1(modifier = Modifier.padding(20.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
                     OutlinedTextField(
-                        value = nameValue.value,
-                        onValueChange = { nameValue.value = it },
-                        label = { Text(text = "Name") },
-                        placeholder = { Text(text = "Name") },
+                        value = loginUiState?.userNameSignUp ?:"",
+                        onValueChange = { authViewModel?.onUserNameChangeSignUp(it) },
+                        label = { Text(text = "Email") },
+                        placeholder = { Text(text = "Email") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
+                    Spacer1(modifier = Modifier.padding(2.dp))
 
                     OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = { emailValue.value = it },
-                        label = { Text(text = "Email Address") },
-                        placeholder = { Text(text = "Email Address") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f)
-                    )
-
-
-
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
+                        value = loginUiState?.passwordSignUp ?:"",
+                        onValueChange = { authViewModel?.onPasswordNameChangeSignUp(it)  },
                         label = { Text(text = "Password") },
                         placeholder = { Text(text = "Password") },
                         singleLine = true,
@@ -117,15 +118,40 @@ fun RegisterPage(navController: NavController?) {
                         else PasswordVisualTransformation()
                     )
 
+                    OutlinedTextField(
+                        value = loginUiState?.confirmPasswordSignUp ?:"",
+                        onValueChange = { authViewModel?.onConfirmPasswordNameChangeSignUp(it)  },
+                        label = { Text(text = "Confirmation Password") },
+                        placeholder = { Text(text = "Confirmation Password") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                passwordVisibility.value = !passwordVisibility.value
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.password_eye),
+                                    contentDescription = "",
+                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
+                                )
+                            }
+                        },
+                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
+
 
                     Spacer1(modifier = Modifier.padding(10.dp))
-                    Button(onClick = { }, modifier = Modifier
+                    Button(onClick = { authViewModel?.createUser(context)}, modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(50.dp)) {
                         Text(text = "Sign Up", fontSize = 20.sp)
                     }
                     Spacer1(modifier = Modifier.padding(20.dp))
-                    Text(
+                    TextButton(onClick = { onNavToLoginPage.invoke() }) {
+                        Text(text = "Login Instead")
+                    }
+                    /*Text(
                         text = "Login Instead",
                         modifier = Modifier.clickable(onClick = {
                             navController?.navigate("login_page"){
@@ -133,7 +159,7 @@ fun RegisterPage(navController: NavController?) {
                                 launchSingleTop = true
                             }
                         })
-                    )
+                    )*/
                     Spacer1(modifier = Modifier.padding(20.dp))
 
                 }
@@ -148,7 +174,9 @@ fun RegisterPage(navController: NavController?) {
 @Composable
 fun Register_page_view(){
     FinalAndroidProjet2023Theme() {
-        RegisterPage(null)
+        RegisterPage( onNavToHomePage = { /*TODO*/ }){
+
+        }
     }
 }
 

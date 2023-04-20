@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,11 +35,16 @@ import com.esmt.cours.finalandroidprojet2023.ui.theme.primaryColor
 
 
 @Composable
-fun LoginPage(navController: NavController?) {
+fun LoginPage(
+    authViewModel: AuthViewModel? = null,
+    onNavToHomePage:() ->Unit,
+    onNavToSignUpPage:() ->Unit,
+    //navController: NavController?
+) {
 
-
-    val emailValue = remember { mutableStateOf("") }
-    val passwordValue = remember { mutableStateOf("") }
+    val loginUiState = authViewModel?.loginUiState
+    val isError = loginUiState?.loginError != null
+    val context = LocalContext.current
 
     val passwordVisibility = remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
@@ -71,20 +78,26 @@ fun LoginPage(navController: NavController?) {
                     ),
                     fontSize = 30.sp
                 )
+
+                if (isError){
+                    Text(text = loginUiState?.loginError ?: "Unknown error",
+                    color = Color.Red)
+                }
                 Spacer(modifier = Modifier.padding(20.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange = { emailValue.value = it },
+                        value = loginUiState?.userName ?: "",
+                        onValueChange = { authViewModel?.onUserNameChange(it) },
                         label = { Text(text = "Email Address") },
                         placeholder = { Text(text = "Email Address") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
+                        isError = isError
                     )
 
                     OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
+                        value = loginUiState?.password ?: "",
+                        onValueChange = { authViewModel?.onPasswordNameChange(it) },
                         trailingIcon = {
                             IconButton(onClick = {
                                 passwordVisibility.value = !passwordVisibility.value
@@ -99,6 +112,7 @@ fun LoginPage(navController: NavController?) {
                         singleLine = true,
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
+                        isError = isError,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .focusRequester(focusRequester = focusRequester),
@@ -106,7 +120,7 @@ fun LoginPage(navController: NavController?) {
 
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(
-                        onClick = {},
+                        onClick = {authViewModel?.loginUser(context)},
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
                             .height(50.dp)
@@ -115,7 +129,10 @@ fun LoginPage(navController: NavController?) {
                     }
 
                     Spacer(modifier = Modifier.padding(20.dp))
-                    Text(
+                    TextButton(onClick = { onNavToSignUpPage.invoke() }) {
+                        Text(text = "Create An Account")
+                    }
+                    /*Text(
                         text = "Create An Account",
                         modifier = Modifier.clickable(onClick = {
                             navController?.navigate("register_page"){
@@ -123,11 +140,20 @@ fun LoginPage(navController: NavController?) {
                                 launchSingleTop = true
                             }
                         })
-                    )
+                    )*/
                     Spacer(modifier = Modifier.padding(20.dp))
                 }
+            }
+        }
 
 
+        if(loginUiState?.isLoading == true){
+            CircularProgressIndicator()
+        }
+
+        LaunchedEffect(key1 = authViewModel?.hasUser){
+            if(authViewModel?.hasUser == true){
+                onNavToHomePage.invoke()
             }
         }
 
@@ -139,7 +165,9 @@ fun LoginPage(navController: NavController?) {
 @Composable
 fun Login_page_view(){
     FinalAndroidProjet2023Theme() {
-        LoginPage(null)
+        LoginPage( onNavToHomePage = { /*TODO*/ }){
+
+        }
     }
 }
 
