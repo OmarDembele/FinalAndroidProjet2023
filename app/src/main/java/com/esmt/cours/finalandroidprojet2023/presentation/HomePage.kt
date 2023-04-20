@@ -191,7 +191,7 @@ fun HomeScreen(){
     ) {
 
         Text(
-            text = "Home Screen",
+            text = "Home Page",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             fontSize = 30.sp,
@@ -211,7 +211,7 @@ fun ProfileScreen(){
     ) {
 
         Text(
-            text = "Profile Screen",
+            text = "Profile page",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             fontSize = 30.sp,
