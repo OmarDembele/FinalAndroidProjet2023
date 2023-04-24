@@ -1,4 +1,4 @@
-package com.esmt.cours.finalandroidprojet2023.presentation
+package com.esmt.cours.finalandroidprojet2023.presentation.viewModel
 
 import android.content.Context
 import android.widget.Toast
@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esmt.cours.finalandroidprojet2023.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class AuthViewModel(
     private val repository: AuthRepository = AuthRepository()

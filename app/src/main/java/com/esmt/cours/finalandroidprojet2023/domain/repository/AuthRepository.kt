@@ -13,6 +13,7 @@ class AuthRepository {
     fun hasUser(): Boolean = Firebase.auth.currentUser != null
 
     fun getUserId(): String = Firebase.auth.currentUser?.uid.orEmpty()
+
     suspend fun createUser (email: String, password: String, onComplete: (Boolean) -> Unit
     ) = withContext(Dispatchers.IO){
         Firebase.auth
@@ -22,7 +23,7 @@ class AuthRepository {
                     onComplete.invoke(true)
                 }
                 else{
-                    onComplete(false)
+                    onComplete.invoke(false)
                 }
             }.await()
     }
@@ -36,9 +37,10 @@ class AuthRepository {
                     onComplete.invoke(true)
                 }
                 else{
-                    onComplete(false)
+                    onComplete.invoke(false)
                 }
             }.await()
     }
+
 
 }

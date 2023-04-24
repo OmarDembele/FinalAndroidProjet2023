@@ -2,7 +2,6 @@ package com.esmt.cours.finalandroidprojet2023.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,8 +21,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.esmt.cours.finalandroidprojet2023.R
+import com.esmt.cours.finalandroidprojet2023.presentation.viewModel.AuthViewModel
 import com.esmt.cours.finalandroidprojet2023.ui.theme.FinalAndroidProjet2023Theme
 import com.esmt.cours.finalandroidprojet2023.ui.theme.primaryColor
 import com.esmt.cours.finalandroidprojet2023.ui.theme.whiteBackground

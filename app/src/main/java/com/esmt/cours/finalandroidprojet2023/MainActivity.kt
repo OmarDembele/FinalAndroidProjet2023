@@ -3,13 +3,9 @@ package com.esmt.cours.finalandroidprojet2023
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.esmt.cours.finalandroidprojet2023.presentation.*
+import com.esmt.cours.finalandroidprojet2023.presentation.viewModel.AuthViewModel
 import com.esmt.cours.finalandroidprojet2023.ui.theme.FinalAndroidProjet2023Theme
 
 class MainActivity : ComponentActivity() {
