@@ -1,7 +1,5 @@
 package com.esmt.cours.finalandroidprojet2023.presentation
 
-
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import com.esmt.cours.finalandroidprojet2023.R
