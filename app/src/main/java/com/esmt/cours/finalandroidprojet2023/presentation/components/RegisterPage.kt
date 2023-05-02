@@ -1,8 +1,7 @@
-package com.esmt.cours.finalandroidprojet2023.presentation
+package com.esmt.cours.finalandroidprojet2023.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,8 +21,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.esmt.cours.finalandroidprojet2023.R
+import com.esmt.cours.finalandroidprojet2023.presentation.viewModel.AuthViewModel
 import com.esmt.cours.finalandroidprojet2023.ui.theme.FinalAndroidProjet2023Theme
 import com.esmt.cours.finalandroidprojet2023.ui.theme.primaryColor
 import com.esmt.cours.finalandroidprojet2023.ui.theme.whiteBackground
@@ -31,13 +30,11 @@ import androidx.compose.foundation.layout.Spacer as Spacer1
 
 
 @Suppress("DEPRECATION")
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RegisterPage(
     authViewModel: AuthViewModel? = null,
     onNavToHomePage:() ->Unit,
     onNavToLoginPage:() ->Unit,
-    //navController: NavController?
 ) {
 
     val loginUiState = authViewModel?.loginUiState
@@ -50,12 +47,13 @@ fun RegisterPage(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .width(150.dp)
+                .height(200.dp)
                 .background(Color.White),
             contentAlignment = Alignment.TopCenter
         ) {
-            Image(painter = painterResource(id = R.drawable.register_page), contentDescription = "")
+            Image(painter = painterResource(id = R.drawable.logo_auth), contentDescription = "")
         }
-
 
         Column(
             modifier = Modifier
@@ -63,7 +61,7 @@ fun RegisterPage(
                 .fillMaxHeight(0.70f)
                 .clip(RoundedCornerShape(30.dp))
                 .background(whiteBackground)
-                .padding(10.dp),
+                .padding(start = 10.dp, top = 40.dp, end = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -83,7 +81,7 @@ fun RegisterPage(
                     Text(text = loginUiState?.signUpError ?: "Unknown error",
                         color = Color.Red)
                 }
-                Spacer1(modifier = Modifier.padding(20.dp))
+                Spacer1(modifier = Modifier.padding(10.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     OutlinedTextField(
@@ -151,15 +149,6 @@ fun RegisterPage(
                     TextButton(onClick = { onNavToLoginPage.invoke() }) {
                         Text(text = "Login Instead")
                     }
-                    /*Text(
-                        text = "Login Instead",
-                        modifier = Modifier.clickable(onClick = {
-                            navController?.navigate("login_page"){
-                                popUpTo = navController.graph.startDestinationId
-                                launchSingleTop = true
-                            }
-                        })
-                    )*/
                     Spacer1(modifier = Modifier.padding(20.dp))
 
                 }

@@ -1,4 +1,4 @@
-package com.esmt.cours.finalandroidprojet2023.presentation
+package com.esmt.cours.finalandroidprojet2023.presentation.viewModel
 
 import android.content.Context
 import android.widget.Toast
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.esmt.cours.finalandroidprojet2023.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+
 
 class AuthViewModel(
     private val repository: AuthRepository = AuthRepository()
@@ -66,14 +66,12 @@ class AuthViewModel(
                 loginUiState.passwordSignUp
             ){
                 isSuccessFul ->
-                if(isSuccessFul){
+                loginUiState = if(isSuccessFul){
                     Toast.makeText(context, "Success Login", Toast.LENGTH_SHORT).show()
-                    loginUiState = loginUiState.copy(isSuccessFul = true)
-                }
-                else{
+                    loginUiState.copy(isSuccessFul = true)
+                } else{
                     Toast.makeText(context, "Failed Login", Toast.LENGTH_SHORT).show()
-                    loginUiState = loginUiState.copy(isSuccessFul = false)
-
+                    loginUiState.copy(isSuccessFul = false)
                 }
             }
     }catch (e:java.lang.Exception){
@@ -98,23 +96,26 @@ class AuthViewModel(
                 loginUiState.password
             ){
                     isSuccessFul ->
-                if(isSuccessFul){
+                loginUiState = if(isSuccessFul){
                     Toast.makeText(context, "Success Login", Toast.LENGTH_SHORT).show()
-                    loginUiState = loginUiState.copy(isSuccessFul = true)
-                }
-                else{
+                    loginUiState.copy(isSuccessFul = true)
+                } else{
                     Toast.makeText(context, "Failed Login", Toast.LENGTH_SHORT).show()
-                    loginUiState = loginUiState.copy(isSuccessFul = false)
+                    loginUiState.copy(isSuccessFul = false)
 
                 }
             }
-        }catch (e:java.lang.Exception){
+        }
+        catch (e:java.lang.Exception){
             loginUiState = loginUiState.copy(loginError = e.localizedMessage)
             e.printStackTrace()
-        }finally {
+        }
+        finally {
             loginUiState = loginUiState.copy(isLoading = false)
         }
     }
+
+
 
     data class LoginUiState(
         val userName: String = "",
@@ -126,8 +127,7 @@ class AuthViewModel(
         val isSuccessFul:Boolean = false,
         val signUpError: String? = null,
         val loginError: String? = null
-    ){
-    }
+    )
 }
 
 

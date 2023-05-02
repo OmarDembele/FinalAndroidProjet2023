@@ -5,9 +5,12 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Product(
-    @PrimaryKey(autoGenerate = true) val id: Int? = 0,
-    val name: String?,
-    val price: Long?,
-    val quantity: String?,
-    val StringSeuil: String?,
+    val name: String,
+    val price: Double,
+    var quantity: Int,
+    val quantitySeuil: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null
 )
+
+class InvalidProductException(message: String) : Exception(message)

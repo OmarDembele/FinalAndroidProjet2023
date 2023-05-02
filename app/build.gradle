@@ -1,3 +1,4 @@
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -68,23 +69,24 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.5.3"
     implementation "androidx.compose.ui:ui-graphics:1.4.1"
     implementation "androidx.compose.foundation:foundation-layout:1.4.1"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation "androidx.compose.material:material-icons-extended:1.4.1"
 
-    //firebase dependance and dagger
-    //implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
-    //implementation 'com.google.firebase:firebase-auth:21.3.0'
-    //implementation 'com.google.dagger:hilt-android:2.44'
-    //kapt 'com.google.dagger:hilt-android-compiler:2.44'
+    //////////////////////////
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
 
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    //Hilt Navigation Compose
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
+
+    //Dagger and Hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    //annotationProcessor "com.google.dagger:hilt-androhilt_versionid-compiler:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+
+
     //Firebase
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation "com.google.firebase:firebase-auth-ktx"
+    
     //Accompanist
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
 
@@ -96,73 +98,14 @@ dependencies {
     implementation "androidx.room:room-runtime:2.5.1"
     implementation "androidx.room:room-ktx:2.5.1"
     kapt "androidx.room:room-compiler:2.5.1"
+
+    //Coil
+    implementation 'io.coil-kt:coil:1.4.0'
+    implementation 'androidx.compose.material:material:1.0.5'
+    implementation "io.coil-kt:coil-compose:1.3.2"
 }
 
 
 
 
 
-
-
-/*
-
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "kotlin-kapt"
-    id "com.google.gms.google-services"
-    id "dagger.hilt.android.plugin"
-}
-
-android {
-    namespace 'ro.alexmamo.firebasesigninwithemailandpassword'
-    compileSdk 33
-
-    defaultConfig {
-        applicationId "ro.alexmamo.firebasesigninwithemailandpassword"
-        minSdk 21
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_16
-        targetCompatibility JavaVersion.VERSION_16
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_16
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-    }
-}
-
-dependencies {
-    //Compose
-    implementation platform("androidx.compose:compose-bom:$compose_bom_version")
-    implementation "androidx.compose.material:material"
-    implementation "androidx.compose.material:material-icons-extended"
-    //Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    //Hilt Navigation Compose
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
-    //Firebase
-    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
-    implementation "com.google.firebase:firebase-auth-ktx"
-    //Accompanist
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-}
- */

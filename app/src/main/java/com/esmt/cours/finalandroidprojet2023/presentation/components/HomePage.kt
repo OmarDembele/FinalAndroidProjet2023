@@ -1,4 +1,6 @@
-package com.esmt.cours.finalandroidprojet2023.presentation
+package com.esmt.cours.finalandroidprojet2023.presentation.components
+
+
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -9,9 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +30,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.esmt.cours.finalandroidprojet2023.domain.use_case.NavigationItem
+import com.esmt.cours.finalandroidprojet2023.presentation.components.screen.*
 import com.esmt.cours.finalandroidprojet2023.ui.theme.FinalAndroidProjet2023Theme
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -51,13 +55,18 @@ fun HomePage(){
             Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController)
         }
     ) {
-        Navigation(navController = navController)
+        NavigationHome(navController = navController)
     }
 
 }
 
+
 @Composable
-fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState){
+fun TopBar(
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+){
+    val navController = rememberNavController()
 
     TopAppBar(
         title = { Text(text = "Gestion de Stock", fontSize = 18.sp) },
@@ -71,7 +80,23 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState){
             }
         },
         backgroundColor = Color.Cyan,
-        contentColor = Color.Black
+        contentColor = Color.Black,
+        actions = {
+
+            IconButton(onClick = {
+                try {
+                    scope.launch {
+                        Firebase.auth.signOut()
+                        navController.navigate(LoginRoute.SignIn.name) 
+                    }
+                }catch(e: NullPointerException ){
+                    e.printStackTrace()
+                    }
+            })
+            {
+                Image(painter = painterResource(id = R.drawable.ic_logout), contentDescription = "to login page")
+            }
+        }
     )
 
 }
@@ -81,10 +106,11 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
 
     val items = listOf(
         NavigationItem.Home,
-        NavigationItem.Profile,
-        NavigationItem.Settings,
-        NavigationItem.Share,
-        NavigationItem.Contact
+        NavigationItem.Add,
+        NavigationItem.Achat,
+        NavigationItem.ListProduct,
+        NavigationItem.Details,
+
     )
 
     Column(
@@ -103,7 +129,7 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         Image(painter = painterResource(id = R.drawable.logo_auth),
             contentDescription = "Image authentification",
             modifier = Modifier
-                .height(100.dp)
+                .height(300.dp)
                 .fillMaxWidth()
                 .padding(10.dp))
         }
@@ -118,7 +144,6 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { items ->
             DrawerItem(item = items, selected = currentRoute == items.route, onItemClick = {
-
                 navController.navigate(items.route){
                     navController.graph.startDestinationRoute?.let { route ->
                         popUpTo(route){
@@ -128,18 +153,15 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
                     launchSingleTop = true
                     restoreState = true
                 }
-
                 scope.launch {
                     scaffoldState.drawerState.close()
                 }
-
-            })
+            }
+            )
         }
-
         Spacer(modifier = Modifier.weight(1f))
-
         Text(
-            text = "Kiran Bahalaskar",
+            text = "Etudiant LPTI3 DAR ESMT",
             color = Color.Black,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
@@ -147,7 +169,6 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
                 .padding(12.dp)
                 .align(Alignment.CenterHorizontally)
         )
-
     }
 }
 
@@ -176,113 +197,13 @@ fun DrawerItem(item: NavigationItem, selected: Boolean, onItemClick: (Navigation
             fontSize = 16.sp,
             color = Color.Black
         )
-
-    }
-
-}
-
-@Composable
-fun HomeScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Home Page",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-
     }
 }
 
-@Composable
-fun ProfileScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
 
-        Text(
-            text = "Profile page",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
 
 @Composable
-fun SettingsScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Settings Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
-
-@Composable
-fun ShareScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Share Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
-
-@Composable
-fun ContactScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Contact Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
-
-@Composable
-fun Navigation(navController: NavHostController = rememberNavController()){
+fun NavigationHome(navController: NavHostController = rememberNavController()){
 
     NavHost(navController, startDestination = NavigationItem.Home.route){
 
@@ -290,25 +211,25 @@ fun Navigation(navController: NavHostController = rememberNavController()){
             HomeScreen()
         }
 
-        composable(NavigationItem.Profile.route){
-            ProfileScreen()
+        composable(NavigationItem.Add.route){
+            AddScreen()
         }
 
-        composable(NavigationItem.Settings.route){
-            SettingsScreen()
+        composable(NavigationItem.Achat.route){
+            PurchaseScreen()
         }
 
-        composable(NavigationItem.Share.route){
-            ShareScreen()
+        composable(NavigationItem.ListProduct.route){
+            ListScreen()
         }
 
-        composable(NavigationItem.Contact.route){
-            ContactScreen()
+        composable(NavigationItem.Details.route){
+            DetailsScreen()
         }
 
     }
-
 }
+
 
 @Preview(showBackground = true)
 @Composable
